@@ -43,8 +43,7 @@ const createControls = (parent, recordCallback) => {
   parent.appendChild(controlsContainer);
 
   const superGif = recordCallback(image);
-  const superGifCanvas = superGif.get_canvas();
-  // superGifCanvas.css('box-sizing', 'unset');
+  superGif.get_canvas();
   const play = document.createElement('button');
   play.classList.add('play-button');
   play.innerHTML =
@@ -86,7 +85,6 @@ const createGifImage = (src, container) => {
 
 /**
  * Dynamically creates a gif instance - gif image and controllers.
- * Uses JQuery.
  * @param {object} data of the giph from giphy api.
  * @param {number} index of the element inside the array. Default is 0.
  * @param {object} container to apend the gifs.
