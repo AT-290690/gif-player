@@ -35,6 +35,7 @@ const gifPreview = image => {
  * @example
  *  createControls(gifContainer)(favoriteGif,GifInfo,controlGif);
  */
+
 const createControls = (parent, recordCallback) => {
   const image = parent.firstChild;
   const controlsContainer = document.createElement('div');
@@ -49,6 +50,7 @@ const createControls = (parent, recordCallback) => {
   play.innerHTML =
     '<img src="https://img.icons8.com/metro/26/000000/play.png"/>';
   controlsContainer.appendChild(play);
+  play.addEventListener('click', superGif.play);
 
   const pause = document.createElement('button');
   pause.classList.add('pause-button');
@@ -56,8 +58,25 @@ const createControls = (parent, recordCallback) => {
     '<img src="https://img.icons8.com/metro/26/000000/pause.png"/>';
   controlsContainer.appendChild(pause);
 
-  play.addEventListener('click', superGif.play);
   pause.addEventListener('click', superGif.pause);
+  const moveBackwards = document.createElement('button');
+  moveBackwards.classList.add('pause-button');
+  moveBackwards.innerHTML =
+    '<img src="https://img.icons8.com/metro/26/000000/forward.png" height="20px" />';
+  controlsContainer.appendChild(moveBackwards);
+  moveBackwards.style.transform = 'scaleX(-1)';
+  moveBackwards.addEventListener('click', () =>
+    superGif.move_to((superGif.get_current_frame() - 1) % superGif.get_length())
+  );
+  const moveForward = document.createElement('button');
+  moveForward.classList.add('pause-button');
+  moveForward.innerHTML =
+    '<img src="https://img.icons8.com/metro/26/000000/forward.png" height="20px" />';
+  controlsContainer.appendChild(moveForward);
+  moveForward.addEventListener('click', () =>
+    superGif.move_to((superGif.get_current_frame() + 1) % superGif.get_length())
+  );
+  console.log(superGif);
 };
 
 /**
@@ -91,19 +110,18 @@ const createGifImage = (src, container) => {
  * @return {object} gif div element.
  * @example
  * // creates the image element whit extra animation delay of 0.5 sec.
- * createGifInstance('http://api/fun.gif',1);
+ * createGifInstance('http://api/fun.gif);
  */
-export const createGifInstance = (data, index = 0, container) => {
+export const createGifInstance = (data, container) => {
   const gifContainer = createGifImage(data, container);
   gifContainer.classList.add('gif-container');
   gifContainer.style.background = randomiseFromPool([
-    '#209cee',
-    '#f7d51d',
-    '#41cc4a',
-    '#a564af',
-    '#3E4CC1',
-    '#EA5C0A',
-    '#38E7D4'
+    '#d11141',
+    '#00b159',
+    '#00aedb',
+    '#f37735',
+    '#ffc425',
+    '#e5e6eb'
   ]);
   const image = gifContainer.firstChild;
   imagesLoaded(image, () => {
