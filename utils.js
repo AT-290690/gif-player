@@ -76,7 +76,6 @@ const createControls = (parent, recordCallback) => {
   moveForward.addEventListener('click', () =>
     superGif.move_to((superGif.get_current_frame() + 1) % superGif.get_length())
   );
-  console.log(superGif);
 };
 
 /**

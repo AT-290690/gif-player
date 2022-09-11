@@ -17,11 +17,13 @@ import { createGifInstance } from './utils.js';
   };
   document.body.ondrop = e => {
     e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file.name.split('.').pop() !== 'gif') {
-      alert('Can only drop .gif files!');
-    } else {
-      dropfile(file);
+    const files = [...e.dataTransfer.files];
+    if (files[0]) {
+      if (files.some(file => file.name.split('.').pop() !== 'gif')) {
+        alert('Can only drop .gif files!');
+      } else {
+        files.forEach(dropfile);
+      }
     }
   };
 })();
