@@ -92,7 +92,7 @@ canvas {
   /* cursor:pointer; */
 }
 
-.pause-button {
+.control-button {
   background-color: transparent;
   border: none;
   font-weight: 900;
