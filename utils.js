@@ -43,7 +43,7 @@ const createControls = (parent, recordCallback) => {
   parent.appendChild(controlsContainer)
   const superGif = recordCallback(image)
   const play = document.createElement('button')
-  play.classList.add('play-button')
+  play.classList.add('control-button')
   play.innerHTML =
     '<img src="https://img.icons8.com/metro/26/000000/play.png"/>'
   controlsContainer.appendChild(play)
@@ -90,48 +90,53 @@ const createControls = (parent, recordCallback) => {
   }
 
   const moveBackwards = document.createElement('button')
-  moveBackwards.classList.add('control-button')
   moveBackwards.innerHTML =
     '<img src="https://img.icons8.com/metro/26/000000/forward.png" height="20px" />'
   controlsContainer.appendChild(moveBackwards)
-  moveBackwards.style.transform = 'scaleX(-1)'
+  moveBackwards.classList.add('control-button')
+  moveBackwards.classList.add('flip')
   clickAndHold(moveBackwards)
-  moveBackwards.addEventListener('click', () =>
-    superGif.move_to((superGif.get_current_frame() - 1) % superGif.get_length())
-  )
+  moveBackwards.addEventListener('click', () => {
+    const step = superGif.get_current_frame() - 1
+    if (step === 0) return
+    superGif.move_to(step)
+  })
 
   const moveForward = document.createElement('button')
-  moveForward.classList.add('control-button')
   moveForward.innerHTML =
     '<img src="https://img.icons8.com/metro/26/000000/forward.png" height="20px" />'
   controlsContainer.appendChild(moveForward)
+  moveForward.classList.add('control-button')
   clickAndHold(moveForward)
-  moveForward.addEventListener('click', () =>
-    superGif.move_to((superGif.get_current_frame() + 1) % superGif.get_length())
-  )
-
-  const cutStart = document.createElement('button')
-  const cutEnd = document.createElement('button')
-  cutEnd.style.opacity = 0.5
-  cutEnd.disabled = true
-  cutStart.classList.add('control-button')
-  cutStart.innerHTML =
-    '<img src="https://img.icons8.com/metro/26/000000/scissors.png" height="20px" />'
-  controlsContainer.appendChild(cutStart)
+  moveForward.addEventListener('click', () => {
+    const step = superGif.get_current_frame() + 1
+    if (step === superGif.get_length()) return
+    superGif.move_to(step)
+  })
   let cutStartTime = 0
   let cutEndTime = superGif.get_length()
+
+  const cutStart = document.createElement('button')
+  cutStart.innerHTML =
+    '<img src="https://img.icons8.com/metro/26/000000/scissors.png" height="20px" />'
+  cutStart.title = cutStartTime
+  controlsContainer.appendChild(cutStart)
+  cutStart.classList.add('control-button')
   cutStart.addEventListener('click', () => {
-    cutEnd.disabled = false
-    cutEnd.style.opacity = 1
     cutStartTime = superGif.get_current_frame()
+    cutStart.title = cutStartTime
   })
-  cutEnd.classList.add('control-button')
+  const cutEnd = document.createElement('button')
   cutEnd.innerHTML =
     '<img src="https://img.icons8.com/metro/26/000000/scissors.png" height="20px" />'
-  cutEnd.style.transform = 'scaleX(-1)'
+  cutEnd.title = cutEndTime
   controlsContainer.appendChild(cutEnd)
+  cutEnd.classList.add('control-button')
+  cutEnd.classList.add('flip')
+
   cutEnd.addEventListener('click', () => {
     cutEndTime = superGif.get_current_frame()
+    cutEnd.title = cutEndTime
   })
   const cut = document.createElement('button')
   cut.classList.add('control-button')
@@ -147,12 +152,12 @@ const createControls = (parent, recordCallback) => {
     if (cutStartTime < cutEndTime) {
       for (let i = cutStartTime; i < cutEndTime; ++i) {
         const current = frames[i]
-        gif.addFrame(current.data, { delay: 100 / current.delay })
+        gif.addFrame(current.data, { delay: 10 * current.delay })
       }
     } else {
       for (let i = cutStartTime; i >= cutEndTime; --i) {
         const current = frames[i]
-        gif.addFrame(current.data, { delay: 100 / current.delay })
+        gif.addFrame(current.data, { delay: 10 * current.delay })
       }
     }
     gif.on(
@@ -215,6 +220,18 @@ export const createGifInstance = (data, container) => {
     '#f37735',
     '#ffc425',
     '#e5e6eb',
+    '#e9724c',
+    '#ffc857',
+    '#c5283d',
+    '#7ac74f',
+    '#56e39f',
+    '#55dde0',
+    '#f40076',
+    '#eba6a9',
+    '#bcaa99',
+    '#9e3ae0',
+    '#f72585',
+    '#4cc9f0',
   ])
   const image = gifContainer.firstChild
   imagesLoaded(image, () =>
